@@ -2661,6 +2661,12 @@ class ProjectPipelineScheduleVariableManager(CreateMixin, UpdateMixin,
     _create_attrs = (('key', 'value'), tuple())
     _update_attrs = (('key', 'value'), tuple())
 
+    def list(self, **kwargs):
+        if 'variables' in self._parent._attrs:
+            return [self._obj_cls(self, x) for x in self._parent._attrs['variables']]
+        else:
+            return [self._obj_cls(self, x) for x in self._parent.manager.get(self._parent.id)._attrs['variables']]
+
 
 class ProjectPipelineSchedule(SaveMixin, ObjectDeleteMixin, RESTObject):
     _managers = (('variables', 'ProjectPipelineScheduleVariableManager'),)
